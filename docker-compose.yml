@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  web-dev:
+    container_name: osl_web-dev
+    image: nginx:1-alpine
+    depends_on:
+      - app-dev
+    ports:
+      - 8080:8080
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+
+  web:
+    container_name: osl_web
+    image: nginx:1-alpine
+    depends_on:
+      - app
+    ports:
+      - 8080:8080
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+
+  db:
+    container_name: osl_db
+    image: mongo:4-bionic
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: mongopw
+
+  app-dev:
+    container_name: osl_app-dev
+    extends:
+      service: node
+    depends_on:
+      - db
+    command: yarn dev
+    ports:
+      - 3000:3000
+
+  app:
+    container_name: osl_app
+    extends:
+      service: node
+    depends_on:
+      - db
+    command: node dist/index.js
+    ports:
+      - 3000:3000
+
+  node:
+    image: simbo/node:14-slim
+    volumes:
+      - .:/project
+    working_dir: /project
+    command: bash
+    tty: true
+    stdin_open: true

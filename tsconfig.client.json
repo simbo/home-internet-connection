@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "jsxFactory": "h",
+    "jsxFragmentFactory": "Fragment",
+    "jsxImportSource": "preact",
+    "lib": ["esnext", "dom"],
+    "module": "es2020",
+    "noEmit": true,
+    "outDir": "dist/client",
+    "target": "esnext"
+  },
+  "include": ["src/client/**/*.ts", "src/client/**/*.tsx"]
+}

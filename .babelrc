@@ -1,0 +1,7 @@
+{
+  "presets": [
+    "@babel/env",
+    ["@babel/typescript", { "isTSX": true, "allExtensions": true, "jxPragma": "h" }],
+    ["@babel/react", { "runtime": "automatic", "importSource": "preact" }]
+  ]
+}
