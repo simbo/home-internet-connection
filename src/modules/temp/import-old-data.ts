@@ -73,10 +73,8 @@ export async function importOldData(): Promise<void> {
   if (await Status.findLatestStatus()) {
     return;
   }
-  await Promise.all(
-    data.map(async d => {
-      const entry = new Status(d);
-      return entry.save();
-    })
-  );
+  for (const d of data) {
+    const entry = new Status(d);
+    await entry.save();
+  }
 }
