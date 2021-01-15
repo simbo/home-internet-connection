@@ -2,19 +2,21 @@
   "apps": [
     {
       "name": "his_server",
-      "script": "dist/index.js",
+      "script": "app/index.js",
       "interpreter": "node@14.15.4"
     },
     {
       "name": "his_crontask_status",
-      "script": "dist/cron-tasks/log-status.task.js",
+      "script": "app/cron-tasks/log-status.task.js",
       "cron_restart": "* * * * *",
+      "autorestart": false,
       "interpreter": "node@14.15.4"
     },
     {
       "name": "his_crontask_speed",
-      "script": "dist/cron-tasks/log-speed.task.js",
+      "script": "app/cron-tasks/log-speed.task.js",
       "cron_restart": "*/15 * * * *",
+      "autorestart": false,
       "interpreter": "node@14.15.4"
     }
   ]
