@@ -2,7 +2,7 @@
   "name": "home-internet-status",
   "shortName": "his",
   "version": "0.1.0",
-  "description": "",
+  "description": "A tool to log connection status and speed of your home internet connection.",
   "author": "Simon Lepel <simbo@simbo.de> (https://simbo.de)",
   "homepage": "https://github.com/simbo/home-internet-status",
   "license": "MIT",

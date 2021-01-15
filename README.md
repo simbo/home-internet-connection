@@ -26,15 +26,24 @@ Hardware Requirements:
 
 ### Preparations
 
-TBD
+```sh
+sudo apt-get install build-essential python
+```
 
-### Installation
+### Install
 
-TBD
+```sh
+git clone https://github.com/simbo/home-internet-status.git
+cd home-internet-status
+./install
+```
 
-### Updates
+### Update
 
-TBD
+```sh
+cd home-internet-status
+./update
+```
 
 ## Development
 
