@@ -1,6 +1,5 @@
 import { connect as dbConnect, connection, ConnectOptions, disconnect as dbDisconnect } from 'mongoose';
 
-import { logger } from '../logger/logger';
 import { env } from '../utils/env';
 
 export async function connect(): Promise<void> {
@@ -9,6 +8,7 @@ export async function connect(): Promise<void> {
   }
   const { host, port, user, password, database } = env.mongodb;
   const uri = `mongodb://${host}:${port}/`;
+
   const options: ConnectOptions = {
     user,
     pass: password,
@@ -18,9 +18,6 @@ export async function connect(): Promise<void> {
     useUnifiedTopology: true,
     useCreateIndex: true
   };
-  connection.once('open', async () => logger.log(`Connected to database @ ${host}:${port}/${database}`));
-  connection.once('disconnected', async () => logger.log('Disconnected from database'));
-  connection.on('error', err => logger.error('Database connection error:', err));
   await dbConnect(uri, options);
 }
 

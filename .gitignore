@@ -4,6 +4,8 @@
 /node_modules
 
 /.env
+/.pm2
+/.last-yarn-state
 
 /.vscode/*
 !/.vscode/settings.json

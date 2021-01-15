@@ -18,9 +18,15 @@ const {
   MONGODB_USER,
   MONGODB_PASSWORD,
   MONGODB_DATABASE,
-  SERVERS_REMOTE,
-  SERVERS_LOCAL,
-  SERVERS_TIMEOUT
+  STATUS_SERVERS_REMOTE,
+  STATUS_SERVERS_LOCAL,
+  STATUS_SERVERS_TIMEOUT,
+  STATUS_INTERVAL,
+  SPEEDTEST_HOST,
+  SPEEDTEST_SOURCE_IP,
+  SPEEDTEST_TIMEOUT,
+  SPEEDTEST_EXPECTED_DOWN,
+  SPEEDTEST_EXPECTED_UP
 } = process.env as { [key: string]: string };
 
 /* eslint-disable @typescript-eslint/naming-convention */
@@ -34,9 +40,15 @@ const envVars = {
   MONGODB_USER,
   MONGODB_PASSWORD,
   MONGODB_DATABASE,
-  SERVERS_REMOTE,
-  SERVERS_LOCAL,
-  SERVERS_TIMEOUT
+  STATUS_SERVERS_REMOTE,
+  STATUS_SERVERS_LOCAL,
+  STATUS_SERVERS_TIMEOUT,
+  STATUS_INTERVAL,
+  SPEEDTEST_HOST,
+  SPEEDTEST_SOURCE_IP,
+  SPEEDTEST_TIMEOUT,
+  SPEEDTEST_EXPECTED_DOWN,
+  SPEEDTEST_EXPECTED_UP
 };
 
 const undefinedEnvVars = Object.entries(envVars)
@@ -65,9 +77,21 @@ export const env = {
     password: MONGODB_PASSWORD,
     database: MONGODB_DATABASE
   },
-  servers: {
-    remote: JSON.parse(SERVERS_REMOTE) as string[],
-    local: JSON.parse(SERVERS_LOCAL) as string[],
-    timeout: parseInt(SERVERS_TIMEOUT, 10)
+  status: {
+    servers: {
+      remote: JSON.parse(STATUS_SERVERS_REMOTE) as string[],
+      local: JSON.parse(STATUS_SERVERS_LOCAL) as string[],
+      timeout: parseInt(STATUS_SERVERS_TIMEOUT, 10)
+    },
+    interval: parseInt(STATUS_INTERVAL, 10)
+  },
+  speedtest: {
+    host: SPEEDTEST_HOST,
+    sourceIp: SPEEDTEST_SOURCE_IP,
+    timeout: parseInt(SPEEDTEST_TIMEOUT, 10),
+    expected: {
+      down: parseInt(SPEEDTEST_EXPECTED_DOWN, 10),
+      up: parseInt(SPEEDTEST_EXPECTED_UP, 10)
+    }
   }
 };

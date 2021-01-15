@@ -1,62 +1,49 @@
-# 🐀 Magawa
+# home-internet-status
 
-> A minesweeper clone.
+> A tool to log connection status and speed of your home internet connection.
 
 ---
 
 ## About
 
-Magawa is a minesweeper clone that I wrote as a just-for-fun project.
+I build this for my personal use to track the connection status and speed of my
+home internet connection.
 
-See the live version at [simbo.codes/magawa](https://simbo.codes/magawa)
+It uses...
 
-## Features
+- hapi as app framework
+- mongodb as database and mongoose as db client
+- preact for the frontend
 
-- first click will always uncover an area and never trigger a mine (as long as
-  you didn't choose too many mines in custom mode)
-- auto-pause when switching tabs or apps
-- start timer on first click
-- flag mines using right-click or alt/shift/ctrl/meta-click
-- different difficulties (_easy_, _medium_, _hard_ and _custom_)
-- global and personal highscores
-- save game settings in storage
-- quick restart function
-- responsive interface
-- legacy support for non-webgl plattforms
+It is designed to run on a Raspberry Pi 4 with Ubuntu 20.10 64-bit (but can also
+be used on similar systems).
 
-See [ToDo](./TODO.md) for planned features.
+## Setup
 
-## Tech Stack
+Hardware Requirements:
 
-- [Preact](https://preactjs.com/) for DOM manipulation
-- [PixiJS](https://www.pixijs.com/) for GFX
-- [Parcel](https://parceljs.org/) as bundler
-- a selfmade, immutable, reactive and [small store](https://github.com/simbo/small-store)
-- also Typescript, Pug, SCSS, css-reset-and-normalize, date-fns and others...
+- Raspberry Pi 4 (or similar device)
+
+### Preparations
+
+TBD
+
+### Installation
+
+TBD
+
+### Updates
+
+TBD
 
 ## Development
 
-```sh
-# watch, serve and rebuild
-yarn start
-# serve in production mode for testing
-yarn serve
-# build for production
-yarn build
-```
+Requirements:
 
-## Deployment
+- docker with docker-compose
 
-...to GitHub Pages is done automatically using GitHub Actions when pushing
-changes to master.
-
-## Trivia
-
-This game is named after the giant pouched rat _Magawa_, who received a gold medal
-in september 2020 for its success and bravery in clearing mine fields in
-Cambodia.
-
-![Magawa](./src/static/images/magawa.jpg)
+There is a docker composition for local development which can be managed via a
+convenient Makefile. Simply run `make` to get a task overview.
 
 ## License and Author
 

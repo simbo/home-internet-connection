@@ -1,0 +1,3 @@
+FROM simbo/node:14
+
+RUN yarn global add pm2 typescript ts-node

@@ -20,11 +20,11 @@ stop: ## stop all services
 .PHONY: attach
 attach: ## attach to dev container
 	@echo "Attaching to dev container…  (press \033[1;37mCTRL-C\033[0m to detach)"
-	@docker attach --detach-keys="ctrl-c" osl_app-dev || true
+	@docker attach --detach-keys="ctrl-c" his_app-dev || true
 
 .PHONY: shell
 shell: ## open a shell in node container
-	@docker-compose run --rm node bash
+	@docker-compose run --rm node bash || true
 
 .PHONY: install
 install: # install node_modules
