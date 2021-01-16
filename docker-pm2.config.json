@@ -8,12 +8,14 @@
     {
       "name": "his_crontask_status",
       "script": "dist/cron-tasks/log-status.task.js",
-      "cron_restart": "* * * * *"
+      "cron_restart": "* * * * *",
+      "autorestart": false
     },
     {
       "name": "his_crontask_speed",
       "script": "dist/cron-tasks/log-speed.task.js",
-      "cron_restart": "*/15 * * * *"
+      "cron_restart": "*/15 * * * *",
+      "autorestart": false
     }
   ]
 }

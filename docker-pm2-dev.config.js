@@ -22,7 +22,7 @@ module.exports = {
       watch: ['src/index.ts', 'src/modules/**/*', 'package.json', 'tsconfig.json', '.env'],
       ...options,
       ...watchOptions
-    }
+    },
     // {
     //   name: 'cron:status',
     //   script: 'ts-node --log-error --project tsconfig.json src/cron-tasks/log-status.task.ts',
@@ -34,19 +34,20 @@ module.exports = {
     // {
     //   name: 'cron:speed',
     //   script: 'ts-node --log-error --project tsconfig.json src/cron-tasks/log-speed.task.ts',
-    //   cron_restart: '*/10 * * * *',
+    //   cron_restart: '*/15 * * * *',
     //   watch: ['src/cron-tasks/log-speed.task.ts', 'src/modules/**/*', 'package.json', 'tsconfig.json', '.env'],
-    //   ...options
+    //   ...options,
+    //   ...watchOptions
     // },
-    // {
-    //   name: 'client',
-    //   script: 'yarn run dev:client',
-    //   ...options
-    // },
-    // {
-    //   name: 'styles',
-    //   script: 'yarn run dev:styles',
-    //   ...options
-    // }
+    {
+      name: 'client',
+      script: 'yarn run dev:client',
+      ...options
+    },
+    {
+      name: 'styles',
+      script: 'yarn run dev:styles',
+      ...options
+    }
   ]
 };
