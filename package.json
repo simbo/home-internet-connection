@@ -45,6 +45,8 @@
     "preact": "^10.5.10",
     "preact-router": "^3.2.1",
     "pug": "^3.0.0",
+    "rxjs": "^6.6.3",
+    "small-store": "^2.0.0",
     "speedtest-net": "^2.1.1"
   },
   "devDependencies": {
