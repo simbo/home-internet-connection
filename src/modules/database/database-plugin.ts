@@ -11,8 +11,8 @@ export const databasePlugin: Plugin<{}> = {
   register: async (server): Promise<void> => {
     const { host, port, database } = env.mongodb;
 
-    connection.once('open', async () => logger.log(`Connected to database @ ${host}:${port}/${database}`));
-    connection.once('disconnected', async () => logger.log('Disconnected from database'));
+    connection.on('open', async () => logger.log(`Connected to database @ ${host}:${port}/${database}`));
+    connection.on('disconnected', async () => logger.log('Disconnected from database'));
     connection.on('error', err => logger.error('Database connection error:', err));
 
     server.events.on('start', async () => connect());
