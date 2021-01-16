@@ -21,7 +21,6 @@ const {
   STATUS_SERVERS_REMOTE,
   STATUS_SERVERS_LOCAL,
   STATUS_SERVERS_TIMEOUT,
-  STATUS_INTERVAL,
   SPEEDTEST_HOST,
   SPEEDTEST_SOURCE_IP,
   SPEEDTEST_TIMEOUT,
@@ -43,7 +42,6 @@ const envVars = {
   STATUS_SERVERS_REMOTE,
   STATUS_SERVERS_LOCAL,
   STATUS_SERVERS_TIMEOUT,
-  STATUS_INTERVAL,
   SPEEDTEST_HOST,
   SPEEDTEST_SOURCE_IP,
   SPEEDTEST_TIMEOUT,
@@ -82,8 +80,7 @@ export const env = {
       remote: JSON.parse(STATUS_SERVERS_REMOTE) as string[],
       local: JSON.parse(STATUS_SERVERS_LOCAL) as string[],
       timeout: parseInt(STATUS_SERVERS_TIMEOUT, 10)
-    },
-    interval: parseInt(STATUS_INTERVAL, 10)
+    }
   },
   speedtest: {
     host: SPEEDTEST_HOST,
