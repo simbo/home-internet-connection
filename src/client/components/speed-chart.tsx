@@ -53,7 +53,6 @@ export class SpeedChart extends Component<SpeedChartProps> {
   }
 
   private getChartOptions(): ChartConfiguration {
-    console.log(this.getDatasets(), this.props.type);
     return {
       type: 'line',
       data: { datasets: this.getDatasets() },
