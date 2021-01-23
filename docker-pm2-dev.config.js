@@ -18,24 +18,24 @@ module.exports = {
   apps: [
     {
       name: 'server',
-      script: 'ts-node --log-error --project tsconfig.json src/index.ts',
-      watch: ['src/index.ts', 'src/modules/**/*', 'package.json', 'tsconfig.json', '.env'],
+      script: 'ts-node --log-error --project tsconfig.json src/server/index.ts',
+      watch: ['src/server/**/*', 'package.json', 'tsconfig.json', '.env'],
       ...options,
       ...watchOptions
     },
     // {
     //   name: 'cron:status',
-    //   script: 'ts-node --log-error --project tsconfig.json src/cron-tasks/log-status.task.ts',
+    //   script: 'ts-node --log-error --project tsconfig.json src/server/cron-tasks/log-status.task.ts',
     //   cron_restart: '* * * * *',
-    //   watch: ['src/cron-tasks/log-status.task.ts', 'src/modules/**/*', 'package.json', 'tsconfig.json', '.env'],
+    //   watch: ['src/server/**/*', 'package.json', 'tsconfig.json', '.env'],
     //   ...options,
     //   ...watchOptions
     // },
     // {
     //   name: 'cron:speed',
-    //   script: 'ts-node --log-error --project tsconfig.json src/cron-tasks/log-speed.task.ts',
+    //   script: 'ts-node --log-error --project tsconfig.json src/server/cron-tasks/log-speed.task.ts',
     //   cron_restart: '*/15 * * * *',
-    //   watch: ['src/cron-tasks/log-speed.task.ts', 'src/modules/**/*', 'package.json', 'tsconfig.json', '.env'],
+    //   watch: ['src/server/**/*', 'package.json', 'tsconfig.json', '.env'],
     //   ...options,
     //   ...watchOptions
     // },

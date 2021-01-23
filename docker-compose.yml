@@ -5,7 +5,7 @@ volumes:
 
 services:
   web:
-    container_name: his_web
+    container_name: hic_web
     image: nginx:1-alpine
     depends_on:
       - app
@@ -15,7 +15,7 @@ services:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
 
   web-dev:
-    container_name: his_web-dev
+    container_name: hic_web-dev
     build:
       context: .
       dockerfile: Dockerfile_nginx-dev
@@ -25,7 +25,7 @@ services:
       - 8080:8080
 
   db:
-    container_name: his_db
+    container_name: hic_db
     image: mongo:4-bionic
     ports:
       - 27017:27017
@@ -34,7 +34,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: mongopw
 
   app:
-    container_name: his_app
+    container_name: hic_app
     build:
       context: .
       dockerfile: Dockerfile_app
@@ -53,7 +53,7 @@ services:
     command: pm2-runtime start docker-pm2.config.json
 
   app-dev:
-    container_name: his_app-dev
+    container_name: hic_app-dev
     build:
       context: .
       dockerfile: Dockerfile_app-dev
@@ -65,6 +65,7 @@ services:
     stdin_open: true
     ports:
       - 3000:3000
+      - 35729:35729
     depends_on:
       - db
     command: pm2-runtime --formatted start docker-pm2-dev.config.js

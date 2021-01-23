@@ -1,0 +1,19 @@
+$font-sans: -apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica, Ubuntu, roboto, noto,
+  segoe ui, arial, sans-serif;
+$font-serif: Iowan Old Style, Apple Garamond, Baskerville, Times New Roman, Droid Serif, Times, Source Serif Pro, serif,
+  Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+$font-mono: Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace;
+
+$line-height: (20/14);
+
+$color-bg: $oc-gray-9;
+$color-text: $oc-gray-0;
+
+$color-status-offline: $oc-red-9;
+$color-status-offline-text: $oc-red-2;
+$color-status-network-reachable: $oc-yellow-7;
+$color-status-network-reachable-text: $oc-yellow-0;
+$color-status-online: $oc-green-8;
+$color-status-online-text: $oc-green-1;
+$color-status-unknown: $oc-gray-7;
+$color-status-unknown-text: $oc-gray-4;

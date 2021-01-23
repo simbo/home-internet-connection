@@ -1,0 +1,69 @@
+.c-status-bar {
+  padding: 1rem;
+
+  &--offline {
+    background: $color-status-offline;
+    color: $color-status-offline-text;
+    box-shadow: 0 0 1rem rgba($color-status-offline, 0.75);
+  }
+
+  &--network-reachable {
+    background: $color-status-network-reachable;
+    color: $color-status-network-reachable-text;
+    box-shadow: 0 0 1rem rgba($color-status-network-reachable, 0.75);
+  }
+
+  &--online {
+    background: $color-status-online;
+    color: $color-status-online-text;
+    box-shadow: 0 0 1rem rgba($color-status-online, 0.75);
+  }
+
+  &--unknown {
+    background: $color-status-unknown;
+    color: $color-status-unknown-text;
+    box-shadow: 0 0 1rem rgba($color-status-unknown, 0.5);
+  }
+
+  &__status-text,
+  &__speed-text {
+    font-size: 1.2em;
+  }
+
+  &__status-details,
+  &__speed-details {
+    font-size: 0.75em;
+
+    &,
+    span {
+      @include text-ellipsis;
+    }
+  }
+
+  &__speed {
+    margin-top: 1em;
+  }
+
+  @media screen and (min-width: 768px) {
+    &__content {
+      display: flex;
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    &__status,
+    &__speed {
+      width: calc(50% - 0.5rem);
+    }
+
+    &__status {
+      margin-right: 0.5rem;
+    }
+
+    &__speed {
+      margin-top: 0;
+      margin-left: 0.5rem;
+    }
+  }
+}

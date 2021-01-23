@@ -1,22 +1,22 @@
 {
   "apps": [
     {
-      "name": "his_server",
-      "script": "app/index.js",
+      "name": "hic_server",
+      "script": "app/server/index.js",
       "interpreter": "node@14.15.4",
       "log_date_format": "YYYY-MM-DD HH:mm:ss Z"
     },
     {
-      "name": "his_crontask_status",
-      "script": "app/cron-tasks/log-status.task.js",
+      "name": "hic_crontask_status",
+      "script": "app/server/cron-tasks/log-status.task.js",
       "cron_restart": "* * * * *",
       "autorestart": false,
       "interpreter": "node@14.15.4",
       "log_date_format": "YYYY-MM-DD HH:mm:ss Z"
     },
     {
-      "name": "his_crontask_speed",
-      "script": "app/cron-tasks/log-speed.task.js",
+      "name": "hic_crontask_speed",
+      "script": "app/server/cron-tasks/log-speed.task.js",
       "cron_restart": "*/15 * * * *",
       "autorestart": false,
       "interpreter": "node@14.15.4",
