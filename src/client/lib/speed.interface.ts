@@ -3,4 +3,6 @@ export interface Speed {
   down: number;
   up: number;
   ping: number;
+  host: string | null;
+  error: string | null;
 }

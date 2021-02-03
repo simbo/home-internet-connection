@@ -24,6 +24,10 @@ export const SpeedSchema = new Schema<SpeedDocument, SpeedModel>(
       type: Number,
       immutable: true
     },
+    host: {
+      type: String,
+      immutable: true
+    },
     report: {
       type: SpeedReportSchema
     },

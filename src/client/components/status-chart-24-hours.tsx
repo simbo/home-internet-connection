@@ -1,58 +1,46 @@
-import { Chart, ChartConfiguration, ChartDataSets, ChartPoint } from 'chart.js';
-import { addMinutes, subHours, subMinutes } from 'date-fns';
-import { endOfHour, startOfHour } from 'date-fns/esm';
+import {
+  Chart,
+  ChartConfiguration,
+  ChartDataset,
+  Legend,
+  LinearScale,
+  LineElement,
+  PointElement,
+  ScatterController,
+  ScatterDataPoint,
+  TimeScale,
+  Tooltip
+} from 'chart.js';
+import 'chartjs-adapter-date-fns';
+import { addMinutes, subMinutes } from 'date-fns';
+import { startOfHour } from 'date-fns/esm';
 import { Component, createRef, VNode } from 'preact';
-import { from, Subject, timer } from 'rxjs';
-import { mergeMap, takeUntil } from 'rxjs/operators';
 
 import { leadingZeros } from '../../shared/leading-zeros';
-import { apiService } from '../lib/api.service';
+import { FONT_MONO, FONT_SANS } from '../lib/constants';
 import { env } from '../lib/env';
 import { formatShortDate, formatStatus, formatStatusBgColor } from '../lib/format';
 import { sortStatus } from '../lib/sort-status';
 import { MinutewiseStatus } from '../lib/status.interface';
-import { toMinutewiseStatus } from '../lib/to-minutewise-status';
+
+Chart.register(ScatterController, LinearScale, TimeScale, PointElement, LineElement, Legend, Tooltip);
 
 interface StatusChart24HoursProps {
-  endDate?: Date;
-}
-
-interface StatusChart24HoursState {
   data: MinutewiseStatus[];
 }
 
-export class StatusChart24Hours extends Component<StatusChart24HoursProps, StatusChart24HoursState> {
+export class StatusChart24Hours extends Component<StatusChart24HoursProps> {
   private readonly chartCanvasRef = createRef<HTMLCanvasElement>();
-  private readonly unsubscribeSubject = new Subject<void>();
   private chart!: Chart;
-
-  constructor(props: StatusChart24HoursProps) {
-    super(props);
-    timer(0, 60000)
-      .pipe(
-        takeUntil(this.unsubscribeSubject),
-        mergeMap(() => {
-          const endDate = this.props.endDate || new Date();
-          const toDate = endOfHour(endDate);
-          const fromDate = startOfHour(subHours(endDate, 24));
-          return from(apiService.getStatusRanged(fromDate, toDate));
-        })
-      )
-      .subscribe(entries => {
-        this.setState(state => ({ ...state, data: toMinutewiseStatus(entries) }));
-      });
-  }
 
   public componentDidMount(): void {
     this.setChart();
   }
 
-  public componentDidUpdate(): void {
-    this.setChart();
-  }
-
-  public componentWillUnmount(): void {
-    this.unsubscribeSubject.next();
+  public componentDidUpdate(prevProps: StatusChart24HoursProps): void {
+    if (JSON.stringify(prevProps.data) !== JSON.stringify(this.props.data)) {
+      this.setChart();
+    }
   }
 
   public render(): VNode {
@@ -63,98 +51,127 @@ export class StatusChart24Hours extends Component<StatusChart24HoursProps, Statu
     );
   }
 
-  private getDatasets(): ChartDataSets[] {
-    return this.state.data
+  private getDatasets(): ChartDataset<'scatter'>[] {
+    return this.props.data
       .reduce(
         (data, { at, status }) => {
-          data[status].push({ t: startOfHour(at), y: at.getMinutes() });
+          data[status].push({ x: startOfHour(at).getTime(), y: at.getMinutes() });
           return data;
         },
-        [[], [], [], []] as ChartPoint[][]
+        [[], [], [], []] as ScatterDataPoint[][]
       )
       .map((data, i) => ({
         label: formatStatus(i),
         data,
         backgroundColor: formatStatusBgColor(i),
         radius: 8,
-        pointStyle: 'rect' as any,
+        pointStyle: 'rect',
+        hitRadius: 0,
+        hoverRadius: 8,
         status: i
       }))
       .sort(sortStatus(data => data.status));
   }
 
-  private getMinMaxOptions(): { min: Date; max: Date } {
+  private getXMinMaxOptions(): { min: number; max: number } {
     return {
-      min: subMinutes(startOfHour(this.state.data[0].at), 30),
-      max: addMinutes(startOfHour(this.state.data[this.state.data.length - 1].at), 30)
+      min: subMinutes(startOfHour(this.props.data[0].at), 30).getTime(),
+      max: addMinutes(startOfHour(this.props.data[this.props.data.length - 1].at), 30).getTime()
     };
   }
 
   private getChartOptions(): ChartConfiguration {
     return {
       type: 'scatter',
-      data: { datasets: this.getDatasets() },
+      data: { labels: [], datasets: this.getDatasets() },
       options: {
-        animation: { duration: 0 },
-        hover: { animationDuration: 0 },
-        responsiveAnimationDuration: 0,
+        font: {
+          family: FONT_SANS,
+          size: 10
+        },
+        animation: false,
         responsive: false,
         devicePixelRatio: 2,
         aspectRatio: 0.4,
-        legend: { labels: { boxWidth: 12 } },
-        tooltips: {
-          callbacks: {
-            label: (tooltipItem, data) => {
-              const { t, y } = ((data.datasets as ChartDataSets[])[tooltipItem.datasetIndex as number]
-                .data as ChartPoint[])[tooltipItem.index as number];
-              return ' ' + formatShortDate(addMinutes(t as Date, y as number));
+        interaction: {
+          mode: 'point'
+        },
+        scales: {
+          x: {
+            type: 'time',
+            time: {
+              displayFormats: { hour: env.time.short },
+              unit: 'hour',
+              stepSize: 1
+            },
+            ...this.getXMinMaxOptions(),
+            ticks: {
+              autoSkip: false,
+              maxRotation: 90,
+              minRotation: 45,
+              labelOffset: 4,
+              font: {
+                family: FONT_MONO
+              }
+            },
+            gridLines: {
+              display: false,
+              drawBorder: false
+            }
+          },
+          y: {
+            type: 'linear',
+            max: 59.5,
+            min: -0.5,
+            beginAtZero: false,
+            ticks: {
+              autoSkip: false,
+              stepSize: 0.5,
+              callback: value => {
+                if (value % 1 !== 0) {
+                  return '';
+                }
+                return leadingZeros(value);
+              },
+              font: {
+                family: FONT_MONO
+              }
+            },
+            gridLines: {
+              display: false,
+              drawBorder: false
             }
           }
         },
-        scales: {
-          xAxes: [
-            {
-              type: 'time',
-              time: {
-                displayFormats: { hour: env.time.short },
-                unit: 'hour',
-                unitStepSize: 1
-              },
-              position: 'bottom',
-              ticks: {
-                ...this.getMinMaxOptions(),
-                autoSkip: false,
-                maxRotation: 90,
-                minRotation: 45,
-                padding: 0,
-                fontSize: 12
-              },
-              gridLines: { display: false }
+        plugins: {
+          legend: {
+            display: true,
+            labels: {
+              boxWidth: 10,
+              boxHeight: 10,
+              font: {
+                size: 12
+              }
             }
-          ],
-          yAxes: [
-            {
-              type: 'linear',
-              position: 'bottom',
-              ticks: {
-                max: 59,
-                min: 0,
-                autoSkip: false,
-                padding: 0,
-                fontSize: 12,
-                stepSize: 5,
-                callback: value => leadingZeros(value)
-              },
-              gridLines: { display: false }
+          },
+          tooltip: {
+            bodyFont: {
+              family: FONT_SANS,
+              size: 12
+            },
+            callbacks: {
+              label: tooltipItem => ` ${tooltipItem.dataset.label}`,
+              afterLabel: tooltipItem =>
+                ` ${formatShortDate(addMinutes(tooltipItem.dataPoint.x, tooltipItem.dataPoint.y))}`
             }
-          ]
+          }
         }
       }
     };
   }
 
   private setChart(): void {
-    if (!this.chartCanvasRef || !this.chartCanvasRef.current || !this.state.data) {
+    if (!this.chartCanvasRef || !this.chartCanvasRef.current || !this.props.data) {
       return;
     }
     if (!this.chart) {
@@ -162,10 +179,10 @@ export class StatusChart24Hours extends Component<StatusChart24HoursProps, Statu
       this.chart = new Chart(canvasCtx, this.getChartOptions());
     } else {
       this.chart.data.datasets = this.getDatasets();
-      const { min, max } = this.getMinMaxOptions();
-      if (this.chart.options.scales?.xAxes && this.chart.options.scales.xAxes[0]?.ticks) {
-        this.chart.options.scales.xAxes[0].ticks.min = min;
-        this.chart.options.scales.xAxes[0].ticks.max = max;
+      if (this.chart.options.scales?.x) {
+        const { min, max } = this.getXMinMaxOptions();
+        this.chart.options.scales.x.min = min;
+        this.chart.options.scales.x.max = max;
       }
       this.chart.update();
     }

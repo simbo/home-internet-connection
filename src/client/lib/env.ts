@@ -7,7 +7,11 @@ const {
   DATE_FULL,
   DATE_SHORT,
   TIME_FULL,
-  TIME_SHORT
+  TIME_SHORT,
+  APP_NAME,
+  APP_SHORT_NAME,
+  APP_LONG_NAME,
+  APP_VERSION
 } = process.env as { [key: string]: string };
 
 /* eslint-disable @typescript-eslint/naming-convention */
@@ -20,7 +24,11 @@ const envVars = {
   DATE_FULL,
   DATE_SHORT,
   TIME_FULL,
-  TIME_SHORT
+  TIME_SHORT,
+  APP_NAME,
+  APP_SHORT_NAME,
+  APP_LONG_NAME,
+  APP_VERSION
 };
 
 const undefinedEnvVars = Object.entries(envVars)
@@ -51,5 +59,11 @@ export const env = {
   time: {
     full: TIME_FULL,
     short: TIME_SHORT
+  },
+  app: {
+    name: APP_NAME,
+    shortName: APP_SHORT_NAME,
+    longName: APP_LONG_NAME,
+    version: APP_VERSION
   }
 };

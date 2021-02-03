@@ -1,6 +1,7 @@
 {
   "name": "home-internet-connection",
-  "shortName": "connection",
+  "shortName": "hic",
+  "longName": "Home Internet Connection",
   "version": "0.1.0",
   "description": "A tool to log connection status and speed of your home internet connection.",
   "author": "Simon Lepel <simbo@simbo.de> (https://simbo.de)",
@@ -34,7 +35,8 @@
     "@hapi/hapi": "^20.0.3",
     "@hapi/inert": "^6.0.3",
     "@hapi/vision": "^6.0.1",
-    "chart.js": "^2.9.4",
+    "chart.js": "^3.0.0-beta.9",
+    "chartjs-adapter-date-fns": "^1.1.0-alpha.3",
     "css-reset-and-normalize": "^2.3.5",
     "date-fns": "^2.16.1",
     "dotenv": "^8.2.0",
@@ -50,8 +52,8 @@
     "preact-router": "^3.2.1",
     "pug": "^3.0.0",
     "rxjs": "^6.6.3",
-    "small-store": "^2.0.0",
-    "speedtest-net": "^2.1.1"
+    "speedtest-net": "^2.1.1",
+    "tslib": "^2.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
@@ -63,7 +65,6 @@
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^11.1.0",
     "@rollup/plugin-typescript": "^8.1.0",
-    "@types/chart.js": "^2.9.30",
     "@types/hapi__hapi": "^20.0.4",
     "@types/hapi__inert": "^5.2.2",
     "@types/hapi__vision": "^5.5.2",
@@ -94,7 +95,6 @@
     "rollup-plugin-visualizer": "^4.2.0",
     "sass": "^1.32.5",
     "ts-node": "^9.1.1",
-    "tslib": "^2.1.0",
     "typescript": "^4.1.3"
   }
 }

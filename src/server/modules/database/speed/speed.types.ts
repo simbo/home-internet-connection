@@ -9,17 +9,13 @@ export interface SpeedEntry {
   down?: number;
   up?: number;
   ping?: number;
+  host?: string;
   report?: SpeedReportDocument;
   error?: string;
 }
 
 export interface SpeedDetailedJson extends SpeedJson {
   report: SpeedReportEntry;
-}
-
-export interface SpeedErrorJson {
-  date: string;
-  error: string;
 }
 
 export interface SpeedDocument extends SpeedEntry, Document<SpeedEntry> {

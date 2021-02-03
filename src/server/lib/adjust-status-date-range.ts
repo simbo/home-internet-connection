@@ -4,7 +4,7 @@ import { StatusJson } from '../../shared/status-json.interface';
 import { StatusValue } from '../../shared/status-value.enum';
 
 export function adjustStatusDateRange(entries: StatusJson[], fromDate?: Date, toDate?: Date): StatusJson[] {
-  // if there are no entries, create on covering the whole range with unknown status
+  // if there are no entries, create one covering the whole range with unknown status
   if (!entries.length && fromDate && toDate) {
     return [
       {
@@ -14,6 +14,7 @@ export function adjustStatusDateRange(entries: StatusJson[], fromDate?: Date, to
       }
     ];
   }
+  const step = 1;
   return (
     entries
       // cut first and last entry to fit range
@@ -34,18 +35,18 @@ export function adjustStatusDateRange(entries: StatusJson[], fromDate?: Date, to
           if (fromDate && isAfter(entryFrom, fromDate) && !isSameMinute(entryFrom, fromDate)) {
             populatedEntries.push({
               from: fromDate.toISOString(),
-              to: max([fromDate, subMinutes(entryFrom, 1)]).toISOString(),
+              to: max([fromDate, subMinutes(entryFrom, step)]).toISOString(),
               status: StatusValue.Unknown
             });
           }
         } else {
           // populate any gaps in between
           const lastTo = new Date(entries[i - 1].to);
-          if (differenceInMinutes(entryFrom, lastTo) > 1) {
-            const newFrom = addMinutes(lastTo, 1);
+          if (differenceInMinutes(entryFrom, lastTo) > step) {
+            const newFrom = addMinutes(lastTo, step);
             populatedEntries.push({
               from: newFrom.toISOString(),
-              to: max([newFrom, subMinutes(entryFrom, 1)]).toISOString(),
+              to: max([newFrom, subMinutes(entryFrom, step)]).toISOString(),
               status: StatusValue.Unknown
             });
           }
@@ -56,7 +57,7 @@ export function adjustStatusDateRange(entries: StatusJson[], fromDate?: Date, to
           const entryTo = new Date(entry.to);
           if (toDate && isBefore(entryTo, toDate) && !isSameMinute(entryTo, toDate)) {
             populatedEntries.push({
-              from: min([toDate, addMinutes(entryTo, 1)]).toISOString(),
+              from: min([toDate, addMinutes(entryTo, step)]).toISOString(),
               to: toDate.toISOString(),
               status: StatusValue.Unknown
             });

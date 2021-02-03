@@ -1,17 +1,17 @@
 import { Component, Fragment, VNode } from 'preact';
 import { Subject } from 'rxjs';
-import { filter, map, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 
 import { StatusValue } from '../../shared/status-value.enum';
+import { currentStatus$ } from '../lib/current-status';
 import { formatBps, formatDate, formatKey, formatPing, formatSince, formatStatus } from '../lib/format';
+import { latestSpeed$ } from '../lib/latest-speed';
 import { Speed } from '../lib/speed.interface';
 import { CurrentStatus } from '../lib/status.interface';
-import { storeSelectors } from '../store/selectors';
-import { store } from '../store/store';
 
 interface StatusBarState {
-  status: CurrentStatus | null;
-  speed: Speed | null;
+  status: CurrentStatus;
+  speed: Speed;
 }
 
 export class StatusBar extends Component<{}, StatusBarState> {
@@ -19,24 +19,12 @@ export class StatusBar extends Component<{}, StatusBarState> {
 
   constructor(props: {}) {
     super(props);
-    store.state$
-      .pipe(
-        takeUntil(this.unsubscribeSubject),
-        map(storeSelectors.currentStatus),
-        filter(status => !!status)
-      )
-      .subscribe(status => {
-        this.setState(state => ({ ...state, status }));
-      });
-    store.state$
-      .pipe(
-        takeUntil(this.unsubscribeSubject),
-        map(storeSelectors.latestSpeed),
-        filter(speed => !!speed)
-      )
-      .subscribe(speed => {
-        this.setState(state => ({ ...state, speed }));
-      });
+    currentStatus$.pipe(takeUntil(this.unsubscribeSubject)).subscribe(status => {
+      this.setState(state => ({ ...state, status }));
+    });
+    latestSpeed$.pipe(takeUntil(this.unsubscribeSubject)).subscribe(speed => {
+      this.setState(state => ({ ...state, speed }));
+    });
   }
 
   public componentWillUnmount(): void {
@@ -57,12 +45,12 @@ export class StatusBar extends Component<{}, StatusBarState> {
             <div class="c-status-bar__status-text">
               Status: <strong>{status ? formatStatus(status.status) : formatStatus(StatusValue.Unknown)}</strong>
             </div>
-            {status && status.since ? (
+            {status && status.from ? (
               <div class="c-status-bar__status-details">
-                <span title={formatDate(status.since)}>since {formatSince(status.since)}</span>
-                {status.updated ? (
+                <span title={formatDate(status.from)}>since {formatSince(status.from)}</span>
+                {status.to ? (
                   <Fragment>
-                    , <span title={formatDate(status.updated)}>updated {formatSince(status.updated)} ago</span>
+                    , <span title={formatDate(status.to)}>updated {formatSince(status.to)} ago</span>
                   </Fragment>
                 ) : (
                   ''

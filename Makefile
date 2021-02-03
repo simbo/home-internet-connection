@@ -5,6 +5,10 @@ dev: start-dev attach ## start dev services and attach to dev container
 build: check-env check-install ## build client and server
 	@docker-compose run --rm node yarn build
 
+.PHONE: build-docker
+build-docker: build ## build docker image
+	@docker build -f ./docker-release/Dockerfile -t simbo/home-internet-connection .
+
 .PHONY: start-dev
 start-dev: stop check-env check-install # (re)start dev services
 	@docker-compose up -d --force-recreate web-dev

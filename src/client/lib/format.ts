@@ -1,8 +1,9 @@
 import { format, formatDistance } from 'date-fns';
-import openColor from 'open-color';
+import OpenColor from 'open-color';
 
 import { StatusValue } from '../../shared/status-value.enum';
 import { env } from './env';
+import { SpeedType } from './speed-type.enum';
 
 export function formatStatus(value: StatusValue): string {
   return {
@@ -13,21 +14,29 @@ export function formatStatus(value: StatusValue): string {
   }[value];
 }
 
+export function formatSpeedType(value: SpeedType): string {
+  return {
+    [SpeedType.Download]: 'Download',
+    [SpeedType.Upload]: 'Upload',
+    [SpeedType.Ping]: 'Ping'
+  }[value];
+}
+
 export function formatStatusBgColor(value: StatusValue): string {
   return {
-    [StatusValue.Offline]: openColor.red[9],
-    [StatusValue.NetworkReachable]: openColor.yellow[7],
-    [StatusValue.InternetReachable]: openColor.green[8],
-    [StatusValue.Unknown]: openColor.gray[7]
+    [StatusValue.Offline]: OpenColor.red[9],
+    [StatusValue.NetworkReachable]: OpenColor.yellow[7],
+    [StatusValue.InternetReachable]: OpenColor.green[8],
+    [StatusValue.Unknown]: OpenColor.gray[7]
   }[value];
 }
 
 export function formatStatusFgColor(value: StatusValue): string {
   return {
-    [StatusValue.Offline]: openColor.red[2],
-    [StatusValue.NetworkReachable]: openColor.yellow[0],
-    [StatusValue.InternetReachable]: openColor.green[1],
-    [StatusValue.Unknown]: openColor.gray[4]
+    [StatusValue.Offline]: OpenColor.red[2],
+    [StatusValue.NetworkReachable]: OpenColor.yellow[0],
+    [StatusValue.InternetReachable]: OpenColor.green[1],
+    [StatusValue.Unknown]: OpenColor.gray[4]
   }[value];
 }
 

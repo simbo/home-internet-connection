@@ -20,7 +20,7 @@ const {
   STATUS_SERVERS_REMOTE,
   STATUS_SERVERS_LOCAL,
   STATUS_SERVERS_TIMEOUT,
-  SPEEDTEST_HOST,
+  SPEEDTEST_HOSTS,
   SPEEDTEST_SOURCE_IP,
   SPEEDTEST_TIMEOUT
 } = process.env as { [key: string]: string };
@@ -38,7 +38,7 @@ const envVars = {
   STATUS_SERVERS_REMOTE,
   STATUS_SERVERS_LOCAL,
   STATUS_SERVERS_TIMEOUT,
-  SPEEDTEST_HOST,
+  SPEEDTEST_HOSTS,
   SPEEDTEST_SOURCE_IP,
   SPEEDTEST_TIMEOUT
 };
@@ -76,7 +76,7 @@ export const env = {
     }
   },
   speedtest: {
-    host: SPEEDTEST_HOST,
+    hosts: JSON.parse(SPEEDTEST_HOSTS) as string[],
     sourceIp: SPEEDTEST_SOURCE_IP,
     timeout: parseInt(SPEEDTEST_TIMEOUT, 10)
   }

@@ -73,6 +73,7 @@ async function render(filename) {
 
 async function processFiles() {
   for (const file of files) {
+    console.log(`Compiling ${file}...`);
     const startTime = new Date().getTime();
     await render(file);
     console.log(`Compiled ${file} in ${(new Date().getTime() - startTime) / 1000}s.`);

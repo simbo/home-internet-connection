@@ -6,16 +6,10 @@ export interface Status {
   to: Date;
 }
 
-export interface LatestStatus {
-  status: StatusValue;
-  since: Date;
-  updated: Date;
-}
-
 export interface CurrentStatus {
   status: StatusValue;
-  since: Date | null;
-  updated: Date;
+  from: Date | null;
+  to: Date;
 }
 
 export interface MinutewiseStatus {

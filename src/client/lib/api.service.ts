@@ -1,20 +1,18 @@
 import { slashJoin } from 'path-slashes';
 
+import { SpeedErrorJson } from '../../shared/speed-error-json.interface';
 import { SpeedJson } from '../../shared/speed-json.interface';
 import { StatusJson } from '../../shared/status-json.interface';
+import { env } from './env';
 import { formatIsoDate } from './format';
 import { Speed } from './speed.interface';
-import { LatestStatus, Status } from './status.interface';
+import { Status } from './status.interface';
 
 class ApiService {
   private readonly basePath = slashJoin(location.pathname, 'api');
 
-  public async getLatestStatus(): Promise<LatestStatus> {
-    return this.request<StatusJson>('status/latest').then(({ from, to, status }) => ({
-      since: new Date(from),
-      updated: new Date(to),
-      status
-    }));
+  public async getLatestStatus(): Promise<Status> {
+    return this.request<StatusJson>('status/latest').then(this.reviveStatus);
   }
 
   public async getStatusForLast24Hours(): Promise<Status[]> {
@@ -32,7 +30,9 @@ class ApiService {
   }
 
   public async getSpeedForLast24Hours(): Promise<Speed[]> {
-    return this.request<SpeedJson[]>('speed/last-24-hours').then(collection => collection.map(this.reviveSpeed));
+    return this.request<(SpeedJson | SpeedErrorJson)[]>('speed/last-24-hours').then(collection =>
+      collection.map(this.reviveSpeed)
+    );
   }
 
   public async getSpeedRanged(fromDate: Date, toDate: Date): Promise<Speed[]> {
@@ -54,8 +54,19 @@ class ApiService {
     return { from: new Date(from), to: new Date(to), status };
   }
 
-  private reviveSpeed(speed: SpeedJson): Speed {
-    return { ...speed, date: new Date(speed.date) };
+  private reviveSpeed(speed: SpeedJson | SpeedErrorJson): Speed {
+    return {
+      date: new Date(speed.date),
+      down: speed.hasOwnProperty('down')
+        ? (speed as SpeedJson).down
+        : env.speedtest.expected.down * env.speedtest.valueMultiplier,
+      up: speed.hasOwnProperty('up')
+        ? (speed as SpeedJson).up
+        : env.speedtest.expected.up * env.speedtest.valueMultiplier,
+      ping: speed.hasOwnProperty('ping') ? (speed as SpeedJson).ping : env.speedtest.expected.ping,
+      host: speed.hasOwnProperty('host') ? (speed as SpeedJson).host : null,
+      error: speed.hasOwnProperty('error') ? (speed as SpeedErrorJson).error : null
+    };
   }
 }
 

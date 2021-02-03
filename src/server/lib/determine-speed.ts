@@ -3,16 +3,29 @@ import * as speedtest from 'speedtest-net';
 import { env } from './env';
 
 export async function determineSpeed(): Promise<speedtest.ResultEvent> {
-  const { host, timeout, sourceIp } = env.speedtest;
-  const cancel = speedtest.makeCancel();
-  const cancelTimeout = setTimeout(() => cancel(), timeout * 1000);
-  const result = await speedtest({
-    host,
-    sourceIp,
-    cancel,
-    acceptLicense: true,
-    acceptGdpr: true
-  });
-  clearTimeout(cancelTimeout);
-  return result;
+  const { hosts, timeout, sourceIp } = env.speedtest;
+  let result: speedtest.ResultEvent | null = null;
+  let error: Error | null = null;
+  let i = 0;
+  while (!result && i < hosts.length) {
+    const cancel = speedtest.makeCancel();
+    const cancelTimeout = setTimeout(() => cancel(), timeout * 1000);
+    try {
+      result = await speedtest({
+        host: hosts[i],
+        sourceIp,
+        cancel,
+        acceptLicense: true,
+        acceptGdpr: true
+      });
+    } catch (err) {
+      error = err;
+    }
+    clearTimeout(cancelTimeout);
+    i++;
+  }
+  if (error) {
+    throw error;
+  }
+  return result as speedtest.ResultEvent;
 }

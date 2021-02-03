@@ -2,6 +2,7 @@
   &__canvas {
     width: 340px !important;
     height: 850px !important;
+    max-width: 100%;
     cursor: crosshair;
   }
 }

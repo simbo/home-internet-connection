@@ -9,7 +9,7 @@ import { env } from '../../lib/env';
 
 export async function getViewManagerConfig(): Promise<ServerViewsConfiguration> {
   const pkgPath = (await findUp('package.json')) as string;
-  const { name, shortName, version } = (await loadJsonFile(pkgPath)) as { [key: string]: any };
+  const { name, shortName, longName, version } = (await loadJsonFile(pkgPath)) as { [key: string]: any };
   return {
     engines: {
       pug: { compile }
@@ -22,6 +22,7 @@ export async function getViewManagerConfig(): Promise<ServerViewsConfiguration> 
       app: {
         name,
         shortName,
+        longName,
         version
       }
     },

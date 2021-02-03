@@ -3,6 +3,7 @@ import { ServerRoute } from '@hapi/hapi';
 import { max, subHours } from 'date-fns';
 import * as Joi from 'joi';
 
+import { adjustSpeedDateRange } from '../../lib/adjust-speed-date-range';
 import { adjustStatusDateRange } from '../../lib/adjust-status-date-range';
 import { Speed } from '../database/speed/speed.schema';
 import { Status } from '../database/status/status.schema';
@@ -67,7 +68,8 @@ export const apiRoutes: ServerRoute[] = [
       const entries = await Status.findStatusSince(sinceDate);
       return adjustStatusDateRange(
         entries.map(entry => entry.toResponse()),
-        sinceDate
+        sinceDate,
+        new Date()
       );
     }
   },
@@ -86,7 +88,11 @@ export const apiRoutes: ServerRoute[] = [
       const toDate = new Date();
       const fromDate = subHours(toDate, 24);
       const entries = await Speed.findSpeedRanged(fromDate, toDate);
-      return entries.map(entry => entry.toResponse());
+      return adjustSpeedDateRange(
+        entries.map(entry => entry.toResponse()),
+        fromDate,
+        toDate
+      );
     }
   },
   {
@@ -104,7 +110,11 @@ export const apiRoutes: ServerRoute[] = [
       const fromDate = new Date(request.params.fromDateString);
       const toDate = max([fromDate, new Date(request.params.toDateString)]);
       const entries = await Speed.findSpeedRanged(fromDate, toDate);
-      return entries.map(entry => entry.toResponse());
+      return adjustSpeedDateRange(
+        entries.map(entry => entry.toResponse()),
+        fromDate,
+        toDate
+      );
     }
   },
   {
@@ -120,7 +130,11 @@ export const apiRoutes: ServerRoute[] = [
     handler: async (request, h) => {
       const sinceDate = new Date(request.params.sinceDateString);
       const entries = await Speed.findSpeedSince(sinceDate);
-      return entries.map(entry => entry.toResponse());
+      return adjustSpeedDateRange(
+        entries.map(entry => entry.toResponse()),
+        sinceDate,
+        new Date()
+      );
     }
   }
 ];
